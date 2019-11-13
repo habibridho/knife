@@ -7,35 +7,42 @@ import (
 
 type Slicer interface {
 	Filter(filter interface{}) Slicer
-	Serve() []int
+	ServeInt() []int
+	ServeString() []string
 }
 
 type slice struct {
-	content interface{}
+	content     interface{}
+	contentType reflect.Type
 }
 
 func NewSlicer(content interface{}) (Slicer, error) {
-	if reflect.TypeOf(content).Kind() != reflect.Slice {
+	contentType := reflect.TypeOf(content)
+	if contentType.Kind() != reflect.Slice {
 		return nil, errors.New("content is not a slice")
 	}
 
-	return &slice{content}, nil
+	return &slice{content, contentType}, nil
 }
 
 func (s *slice) Filter(filter interface{}) Slicer {
-	newContent := []int{}
 	filterValue := reflect.ValueOf(filter)
 	contentValue := reflect.ValueOf(s.content)
+	newContent := reflect.MakeSlice(s.contentType, 0, 0)
 	for i := 0; i < contentValue.Len(); i++ {
 		if content := contentValue.Index(i); content.Interface() != filterValue.Interface() {
-			newContent = append(newContent, content.Interface().(int))
+			newContent = reflect.Append(newContent, content)
 		}
 	}
 
-	s.content = newContent
+	s.content = newContent.Interface()
 	return s
 }
 
-func (s *slice) Serve() []int {
+func (s *slice) ServeInt() []int {
 	return s.content.([]int)
+}
+
+func (s *slice) ServeString() []string {
+	return s.content.([]string)
 }
