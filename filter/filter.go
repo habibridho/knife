@@ -9,6 +9,7 @@ type Slicer interface {
 	Filter(filter interface{}) Slicer
 	ServeInt() []int
 	ServeString() []string
+	ServeInterface() interface{}
 }
 
 type slice struct {
@@ -45,4 +46,8 @@ func (s *slice) ServeInt() []int {
 
 func (s *slice) ServeString() []string {
 	return s.content.([]string)
+}
+
+func (s *slice) ServeInterface() interface{} {
+	return s.content
 }
