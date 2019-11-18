@@ -51,6 +51,33 @@ func TestFilterStruct(t *testing.T) {
 	}
 }
 
+func TestSlice_FilterWithFunc(t *testing.T) {
+	type foo struct {
+		key string
+		val int
+	}
+	slice := []foo{
+		{"1", 1},
+		{"2", 2},
+		{"3", 3},
+		{"4", 4},
+	}
+	slicer, _ := NewSlicer(slice)
+	result := slicer.FilterWithFunc(func(currentValue interface{}) bool {
+		return currentValue.(foo).key == "1"
+	}).ServeInterface().([]foo)
+	expectedResult := []foo{
+		{"2", 2},
+		{"3", 3},
+		{"4", 4},
+	}
+	for i := range expectedResult {
+		if result[i] != expectedResult[i] {
+			t.Errorf("Not same, expected: %v, got: %v", expectedResult, result)
+		}
+	}
+}
+
 func TestWrongInput(t *testing.T) {
 	slice := "some wrong slice"
 	_, err := NewSlicer(slice)
