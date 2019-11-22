@@ -8,8 +8,13 @@ import (
 type Slicer interface {
 	Filter(filter interface{}) Slicer
 	FilterWithFunc(f func(currentValue interface{}) bool) Slicer
-	ServeInt() []int
+	ServeBool() []bool
 	ServeString() []string
+	ServeInt() []int
+	ServeInt8() []int8
+	ServeInt16() []int16
+	ServeInt32() []int32
+	ServeInt64() []int64
 	ServeInterface() interface{}
 }
 
@@ -54,12 +59,32 @@ func (s *slice) FilterWithFunc(f func(currentValue interface{}) bool) Slicer {
 	return s
 }
 
-func (s *slice) ServeInt() []int {
-	return s.content.([]int)
+func (s *slice) ServeBool() []bool {
+	return s.content.([]bool)
 }
 
 func (s *slice) ServeString() []string {
 	return s.content.([]string)
+}
+
+func (s *slice) ServeInt() []int {
+	return s.content.([]int)
+}
+
+func (s *slice) ServeInt8() []int8 {
+	return s.content.([]int8)
+}
+
+func (s *slice) ServeInt16() []int16 {
+	return s.content.([]int16)
+}
+
+func (s *slice) ServeInt32() []int32 {
+	return s.content.([]int32)
+}
+
+func (s *slice) ServeInt64() []int64 {
+	return s.content.([]int64)
 }
 
 func (s *slice) ServeInterface() interface{} {
