@@ -13,6 +13,12 @@ type Server interface {
 	ServeUint16() []uint16
 	ServeUint32() []uint32
 	ServeUint64() []uint64
+	ServeByte() []byte
+	ServeRune() []rune
+	ServeFloat32() []float32
+	ServeFloat64() []float64
+	ServeComplex64() []complex64
+	ServeComplex128() []complex128
 	ServeInterface() interface{}
 }
 
@@ -62,6 +68,25 @@ func (s *slice) ServeUint32() []uint32 {
 
 func (s *slice) ServeUint64() []uint64 {
 	return s.content.([]uint64)
+}
+
+func (s *slice) ServeByte() []byte {
+	return s.content.([]byte)
+}
+func (s *slice) ServeRune() []rune {
+	return s.content.([]rune)
+}
+func (s *slice) ServeFloat32() []float32 {
+	return s.content.([]float32)
+}
+func (s *slice) ServeFloat64() []float64 {
+	return s.content.([]float64)
+}
+func (s *slice) ServeComplex64() []complex64 {
+	return s.content.([]complex64)
+}
+func (s *slice) ServeComplex128() []complex128 {
+	return s.content.([]complex128)
 }
 
 func (s *slice) ServeInterface() interface{} {
