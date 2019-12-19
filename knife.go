@@ -1,37 +1,9 @@
 package knife
 
-type slice struct {
-	content []uint64
-}
+type Knife interface {
+	// Filter out items that match criteria
+	Filter(criteria func(item interface{}) bool) Knife
 
-func NewSlicer(content []uint64) *slice {
-	return &slice{content}
-}
-
-func (s *slice) Filter(f func(item uint64) bool) *slice {
-	ret := []uint64{}
-	for _, item := range s.content {
-		if !f(item) {
-			ret = append(ret, item)
-		}
-	}
-
-	s.content = ret
-	return s
-}
-
-func (s *slice) Find(f func(item uint64) bool) *slice {
-	ret := []uint64{}
-	for _, item := range s.content {
-		if f(item) {
-			ret = append(ret, item)
-		}
-	}
-
-	s.content = ret
-	return s
-}
-
-func (s *slice) GetContent() []uint64 {
-	return s.content
+	// Find items that match criteria
+	Find(criteria func(item interface{}) bool) Knife
 }
